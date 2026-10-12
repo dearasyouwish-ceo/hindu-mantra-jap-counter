@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#a54019">
+<meta name="description" content="A peaceful Hindu mantra jap counter with mala beads, daily goals, and jap history.">
+<title>Hindu Mantra Jap</title>
+<style>
+:root{--bg:#fff8eb;--card:#fffdf7;--ink:#502c19;--muted:#987b61;--accent:#a54019;--gold:#e8b65d;--line:#efdfca}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:480px;min-height:100dvh;margin:auto;background:var(--bg);padding-bottom:20px}
+header{padding:23px 20px;background:linear-gradient(140deg,#792910,#d65319,#e8a63e);color:white}
+.om{font-size:32px;color:#ffdc92}
+header h1{font-size:25px;margin:5px 0}
+.sub{font-size:12px;opacity:.85}
+main{padding:14px 13px 24px}
+.card{padding:15px;background:var(--card);border:1px solid var(--line);border-radius:17px;margin-bottom:12px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.muted{font-size:12px;color:var(--muted)}
+.pill{padding:6px 10px;background:#fff0d9;color:var(--accent);border-radius:20px;font-size:11px;font-weight:700}
+.btn{padding:10px 12px;border:0;border-radius:10px;font-size:12px;font-weight:700}
+.soft{background:#fff0d9;color:var(--accent)}
+.primary{background:var(--accent);color:white}
+.mantra{font-size:21px;font-weight:800;color:var(--accent);margin:12px 0 6px;overflow-wrap:anywhere}
+.countercard{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
+.counter{display:block;width:100%;text-align:center;font-size:clamp(50px,15vw,68px);font-weight:850;line-height:1.15;letter-spacing:-2px;font-variant-numeric:tabular-nums;color:var(--accent);margin:12px auto 2px}
+#currentMala{display:block;width:100%;max-width:270px;margin:9px auto}
+.tap{display:block;flex-shrink:0;margin:12px auto 18px;width:136px;height:136px;border-radius:50%;border:5px solid #f1d4a0;background:radial-gradient(circle at 30% 25%,#ffdb8b,#e57722 65%,#96351a);color:white;font-size:25px;font-weight:800;box-shadow:0 5px 0 #943617;touch-action:manipulation;user-select:none}
+.tap small{display:block;font-size:11px}
+.tap:active{transform:translateY(3px);box-shadow:0 2px 0 #943617}
+.bar{height:8px;background:#f0e1cf;border-radius:10px;overflow:hidden;margin:10px 0}
+.fill{height:100%;background:#d65a1b;width:0%;transition:width .2s}
+.stats{display:flex;gap:7px;margin-bottom:12px}
+.stat{flex:1;min-width:0;background:#fff0d9;padding:11px 8px;border-radius:12px}
+.stat strong{display:block;font-size:19px;color:var(--accent);overflow-wrap:anywhere}
+.stat span{font-size:10px;color:var(--muted)}
+nav{display:flex;justify-content:space-around;position:sticky;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:8px 2px max(8px,env(safe-area-inset-bottom));z-index:5}
+nav button{border:0;background:transparent;color:#927860;font-size:10px;padding:6px 9px;border-radius:10px}
+nav b{display:block;font-size:20px;font-weight:500}
+nav .active{background:#fff0d9;color:var(--accent)}
+.hide{display:none!important}
+.field{width:100%;padding:11px;border:1px solid #e7d5bf;border-radius:10px;background:var(--card);color:var(--ink);margin:8px 0}
+.item{padding:12px 0;border-bottom:1px solid #f0e4d5}
+.item:last-child{border:0}
+.periods{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:12px 0}
+.periods button{padding:9px 1px;border:1px solid #e9d6bc;border-radius:10px;background:var(--card);color:#8c6548;font-size:12px}
+.periods .active{background:var(--accent);color:white}
+.chart{height:140px;display:flex;align-items:end;gap:4px;padding-top:15px}
+.chartcol{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:end;gap:5px;text-align:center}
+.chartbar{width:100%;min-height:3px;border-radius:5px;background:#eacb9d}
+.chartlabel{font-size:9px;color:var(--muted)}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#793619;color:white;border-radius:18px;padding:11px 17px;font-size:13px;z-index:9;max-width:90%;text-align:center;box-shadow:0 3px 12px #0002}
+h2{font-size:21px;margin:5px 0 14px}
+h3{font-size:16px;margin:4px 0 12px}
+.dark{--bg:#211a19;--card:#302522;--ink:#f8e9d4;--muted:#c3a68a;--line:#514037;--accent:#ffcb7c}
+.dark .stat{background:#433027}
+.dark .stat strong{color:#ffcb7c}
+.dark .tap{border-color:#75512c}
+.nature{--bg:#eff5e9;--card:#fbfff6;--ink:#254a36;--accent:#286b49;--line:#d7e5cf}
+.temple{--bg:#fff4e5;--card:#fffaf1;--accent:#a84725}
+.light{--bg:#f7f5ef;--card:#fff;--ink:#60361d;--accent:#9a532d}
+@media(max-width:350px){.card{padding:12px}.tap{width:120px;height:120px}.stat{padding:9px 5px}.stat strong{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<header>
+  <div class="row"><span class="om">ॐ</span><span class="sub">YOUR DAILY SACRED PRACTICE</span></div>
+  <h1>Hindu Mantra Jap</h1>
+  <div class="sub" id="todayDate"></div>
+</header>
+
+<main>
+<section id="home">
+  <div class="card">
+    <div class="row"><span class="pill">SELECTED MANTRA</span><button class="btn soft" onclick="go('mantras')">Change ↗</button></div>
+    <div class="mantra" id="mantraName">ॐ नमः शिवाय</div>
+    <div class="muted" id="mantraPron">Om Namah Shivaya</div>
+  </div>
+
+  <div class="card countercard">
+    <div class="row" style="width:100%"><span class="muted">TODAY'S JAP</span><span class="pill" id="roundLabel">Round 1</span></div>
+    <div class="counter" id="count">0</div>
+    <div class="muted">repetitions completed</div>
+    <svg id="currentMala" viewBox="0 0 300 210" role="img" aria-label="108-bead jap mala"></svg>
+    <button class="tap" onclick="tapJap()" aria-label="Count one mantra repetition">ॐ<small>TAP TO CHANT</small></button>
+    <div class="muted">One tap · One prayer · Inner peace</div>
+    <div class="row" style="width:100%;margin-top:14px">
+      <button class="btn soft" onclick="resetSession()">↺ Reset session</button>
+      <button class="btn soft" onclick="undoJap()">↶ Undo</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row"><b>Today's goal</b><span class="muted" id="goalLabel">0 / 108</span></div>
+    <div class="bar"><div class="fill" id="goalFill"></div></div>
+    <div class="muted" id="remaining">108 repetitions to your goal</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><strong id="rounds">0</strong><span>Rounds completed</span></div>
+    <div class="stat"><strong id="streak">0</strong><span>Day streak</span></div>
+    <div class="stat"><strong id="lifetime">0</strong><span>Lifetime jap</span></div>
+  </div>
+</section>
+
+<section id="history" class="hide">
+  <h2>Jap History</h2>
+  <div class="periods">
+    <button class="active" data-period="daily" onclick="setPeriod('daily')">Daily</button>
+    <button data-period="weekly" onclick="setPeriod('weekly')">Weekly</button>
+    <button data-period="monthly" onclick="setPeriod('monthly')">Monthly</button>
+    <button data-period="yearly" onclick="setPeriod('yearly')">Yearly</button>
+  </div>
+  <div class="card row"><button class="btn soft" onclick="shiftPeriod(-1)">‹ Previous</button><b id="rangeLabel" style="font-size:12px;text-align:center"></b><button class="btn soft" onclick="shiftPeriod(1)">Next ›</button></div>
+  <div class="stats">
+    <div class="stat"><strong id="periodTotal">0</strong><span>Repetitions</span></div>
+    <div class="stat"><strong id="activeDays">0</strong><span>Active days</span></div>
+    <div class="stat"><strong id="goalsMet">0</strong><span>Goals achieved</span></div>
+  </div>
+  <div class="card"><div class="row"><b id="chartTitle">Daily jap</b><span class="muted" id="peakLabel"></span></div><div class="chart" id="chart"></div><p class="muted">Your recorded jap counts for the selected period.</p></div>
+  <div class="card"><h3>Period summary</h3>
+    <div class="item row"><span class="muted">Average per interval</span><b id="average">0</b></div>
+    <div class="item row"><span class="muted">Best interval</span><b id="best">—</b></div>
+    <div class="item row"><span class="muted">Daily goal</span><b id="summaryGoal">108</b></div>
+    <div class="item row"><span class="muted">Lifetime jap</span><b id="summaryLife">0</b></div>
+  </div>
+  <div class="card"><h3>Session history</h3><div id="sessions"></div></div>
+</section>
+
+<section id="mantras" class="hide">
+  <h2>Sacred Mantras</h2>
+  <div class="card" id="mantraList"></div>
+  <div class="card"><h3>Add your own mantra</h3>
+    <input class="field" id="newMantra" placeholder="Mantra name or sacred text">
+    <input class="field" id="newPron" placeholder="Pronunciation (optional)">
+    <button class="btn primary" style="width:100%" onclick="addMantra()">＋ Save mantra</button>
+  </div>
+</section>
+
+<section id="settings" class="hide">
+  <h2>Settings</h2>
+  <div class="card"><b>Appearance</b>
+    <select class="field" id="theme" onchange="changeTheme(this.value)">
+      <option value="saffron">Saffron & Gold</option><option value="temple">Temple warmth</option><option value="nature">Nature & Serenity</option><option value="light">Light & Minimal</option><option value="dark">Night meditation</option>
+    </select>
+    <b>Daily repetition goal</b>
+    <select class="field" id="goal" onchange="changeGoal(this.value)">
+      <option value="27">27</option><option value="54">54</option><option value="108">108</option><option value="216">216</option><option value="1008">1008</option>
+    </select>
+  </div>
+  <div class="card">
+    <div class="item row">Vibration feedback<input type="checkbox" id="vibration" checked onchange="savePrefs()"></div>
+    <div class="item row">Sound feedback<input type="checkbox" id="sound" onchange="savePrefs()"></div>
+    <p class="muted">Feedback availability depends on your device and browser.</p>
+  </div>
+  <div class="card"><h3>Manage data</h3><p class="muted">Your progress is saved locally in this browser.</p><button class="btn soft" onclick="resetSession()">Reset current session</button><button class="btn" style="background:#fbe6e1;color:#a12e1c;margin-left:6px" onclick="clearData()">Delete all app data</button></div>
+</section>
+</main>
+
+<nav>
+  <button class="active" data-page="home" onclick="go('home')"><b>⌂</b>Home</button>
+  <button data-page="mantras" onclick="go('mantras')"><b>ॐ</b>Mantras</button>
+  <button data-page="history" onclick="go('history')"><b>◷</b>History</button>
+  <button data-page="settings" onclick="go('settings')"><b>⚙</b>Settings</button>
+</nav>
+<div id="toast" class="toast hide" role="status"></div>
+</div>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const defaults=[
+{name:"ॐ नमः शिवाय",pron:"Om Namah Shivaya"},
+{name:"हरे कृष्ण हरे कृष्ण",pron:"Hare Krishna Hare Krishna"},
+{name:"ॐ गं गणपतये नमः",pron:"Om Gam Ganapataye Namaha"},
+{name:"गायत्री मंत्र",pron:"Om Bhur Bhuvaḥ Swaḥ"},
+{name:"महामृत्युंजय मंत्र",pron:"Om Tryambakam Yajamahe"}
+];
+const dateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const today=()=>dateKey(new Date());
+let state={date:today(),count:0,total:0,goal:108,mantras:defaults,selected:0,theme:'saffron',vibration:true,sound:false,days:{},sessions:[]};
+let period='daily',offset=0;
+try{const saved=JSON.parse(localStorage.getItem('mantra-jap-app'));if(saved)state={...state,...saved,days:saved.days||{},sessions:saved.sessions||[],mantras:saved.mantras?.length?saved.mantras:defaults}}catch(e){}
+function save(){try{localStorage.setItem('mantra-jap-app',JSON.stringify(state))}catch(e){}}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(s){$('toast').textContent=s;$('toast').classList.remove('hide');clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').classList.add('hide'),2200)}
+function closeDay(){if(state.date!==today()){if(state.count)state.sessions.unshift({date:state.date,count:state.count,mantra:state.mantras[state.selected]?.name||defaults[0].name});state.date=today();state.count=0;state.sessions=state.sessions.slice(0,300);save()}}
+function drawMala(){let svg='';for(let i=0;i<108;i++){const a=-Math.PI/2+i*2*Math.PI/108,x=150+105*Math.cos(a),y=104+82*Math.sin(a);svg+=`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${i%9===0?5:3.8}" fill="${i<state.count%108?'#c65a1e':'#ead5b7'}" stroke="#d8bd98" stroke-width="1"/>`} $('currentMala').innerHTML=svg}
+function streak(){let n=0,t=new Date();if(!state.days[today()])t.setDate(t.getDate()-1);for(let i=0;i<370;i++){if((state.days[dateKey(t)]||0)>0)n++;else break;t.setDate(t.getDate()-1)}return n}
+function render(){closeDay();const m=state.mantras[state.selected]||defaults[0];$('todayDate').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});$('mantraName').textContent=m.name;$('mantraPron').textContent=m.pron||'Sacred mantra';$('count').textContent=state.count.toLocaleString('en-IN');$('roundLabel').textContent='Round '+(Math.floor(state.count/108)+1)+' of 108';$('goalLabel').textContent=state.count.toLocaleString('en-IN')+' / '+state.goal;$('goalFill').style.width=Math.min(100,state.count/state.goal*100)+'%';$('remaining').textContent=state.count>=state.goal?'Daily goal achieved! 🙏':(state.goal-state.count).toLocaleString('en-IN')+' repetitions to your goal';$('rounds').textContent=Math.floor(state.total/108).toLocaleString('en-IN');$('streak').textContent=streak();$('lifetime').textContent=state.total.toLocaleString('en-IN');drawMala();save()}
+window.tapJap=function(){closeDay();state.count++;state.total++;state.days[today()]=(state.days[today()]||0)+1;if(state.vibration&&navigator.vibrate)navigator.vibrate(18);if(state.count%108===0){state.sessions.unshift({date:today(),count:108,mantra:state.mantras[state.selected].name});state.sessions=state.sessions.slice(0,300)}render();if(!$('history').classList.contains('hide'))renderHistory();if(state.count%108===0)toast('🙏 108 repetitions completed!');else if(state.count===state.goal)toast('Daily goal achieved!')}
+window.undoJap=function(){if(!state.count)return toast('Nothing to undo');state.count--;state.total=Math.max(0,state.total-1);state.days[today()]=Math.max(0,(state.days[today()]||0)-1);if(!state.days[today()])delete state.days[today()];render();renderHistory()}
+window.resetSession=function(){if(!state.count)return toast('Session is already at zero');state.sessions.unshift({date:today(),count:state.count,mantra:state.mantras[state.selected].name});state.sessions=state.sessions.slice(0,300);state.count=0;render();renderHistory();toast('Session reset')}
+window.go=function(id){document.querySelectorAll('#app main section').forEach(s=>s.classList.toggle('hide',s.id!==id));document.querySelectorAll('#app nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='history')renderHistory();if(id==='mantras')renderMantras()}
+window.setPeriod=function(p){period=p;offset=0;renderHistory()}
+window.shiftPeriod=function(n){offset+=n;renderHistory()}
+function range(){let s=new Date(),e=new Date(),items=[],label='';if(period==='daily'){s.setDate(s.getDate()+offset);label=s.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});items=[{k:dateKey(s),l:'Jap',v:state.days[dateKey(s)]||0}]}else if(period==='weekly'){s.setDate(s.getDate()-(s.getDay()+6)%7+offset*7);s.setHours(0,0,0,0);e=new Date(s);e.setDate(e.getDate()+6);label=s.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' – '+e.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});for(let i=0;i<7;i++){let x=new Date(s);x.setDate(s.getDate()+i);items.push({k:dateKey(x),l:x.toLocaleDateString(undefined,{weekday:'short'}),v:state.days[dateKey(x)]||0})}}else if(period==='monthly'){s=new Date(s.getFullYear(),s.getMonth()+offset,1);e=new Date(s.getFullYear(),s.getMonth()+1,0);label=s.toLocaleDateString(undefined,{month:'long',year:'numeric'});for(let i=1;i<=e.getDate();i++){let x=new Date(s.getFullYear(),s.getMonth(),i);items.push({k:dateKey(x),l:String(i),v:state.days[dateKey(x)]||0})}}else{s=new Date(s.getFullYear()+offset,0,1);label=String(s.getFullYear());for(let i=0;i<12;i++){let v=0;for(let j=1;j<=new Date(s.getFullYear(),i+1,0).getDate();j++)v+=state.days[dateKey(new Date(s.getFullYear(),i,j))]||0;items.push({k:dateKey(new Date(s.getFullYear(),i,1)),l:new Date(s.getFullYear(),i,1).toLocaleDateString(undefined,{month:'short'}),v})}}return{s,e,items,label}}
+function renderHistory(){const a=range();document.querySelectorAll('#app .periods button').forEach(b=>b.classList.toggle('active',b.dataset.period===period));$('rangeLabel').textContent=a.label;$('chartTitle').textContent=period==='daily'?'Selected day':period==='yearly'?'Monthly breakdown':'Daily breakdown';const total=a.items.reduce((s,x)=>s+x.v,0),active=a.items.filter(x=>x.v>0).length,goals=a.items.filter(x=>x.v>=state.goal).length,max=Math.max(1,...a.items.map(x=>x.v)),best=a.items.reduce((p,x)=>x.v>p.v?x:p,{v:0,l:'—'}),shown=period==='monthly'&&a.items.length>16?a.items.filter((x,i)=>i%3===0||i===a.items.length-1):a.items;$('periodTotal').textContent=total.toLocaleString('en-IN');$('activeDays').textContent=active;$('goalsMet').textContent=goals;$('peakLabel').textContent='Peak '+max.toLocaleString('en-IN');$('chart').innerHTML=shown.map(x=>`<div class="chartcol"><span style="font-size:9px">${x.v||''}</span><div class="chartbar" style="height:${Math.max(3,x.v/max*80)}px;background:${x.k===today()?'#d65a1b':'#eacb9d'}"></div><span class="chartlabel">${safe(x.l)}</span></div>`).join('');$('average').textContent=Math.round(total/Math.max(1,a.items.length)).toLocaleString('en-IN');$('best').textContent=best.v?best.l+' · '+best.v:'—';$('summaryGoal').textContent=state.goal;$('summaryLife').textContent=state.total.toLocaleString('en-IN');const lo=dateKey(a.s),hi=dateKey(period==='daily'?a.s:period==='weekly'?a.e:period==='monthly'?new Date(a.s.getFullYear(),a.s.getMonth()+1,0):new Date(a.s.getFullYear(),11,31));let ss=state.sessions.filter(x=>x.date>=lo&&x.date<=hi).slice(0,30);if(state.count&&state.date>=lo&&state.date<=hi)ss.unshift({date:state.date,count:state.count,mantra:state.mantras[state.selected].name});$('sessions').innerHTML=ss.length?ss.map(x=>`<div class="item row"><div><b>${safe(x.mantra||'Jap session')}</b><div class="muted">${x.date}</div></div><span class="pill">${x.count} jap</span></div>`).join(''):'<p class="muted">No sessions recorded in this period.</p>'}
+function renderMantras(){$('mantraList').innerHTML=state.mantras.map((m,i)=>`<div class="item row"><div style="flex:1;min-width:0"><b>${safe(m.name)}</b><div class="muted">${safe(m.pron||'Sacred mantra')}</div></div>${i===state.selected?'<span class="pill">Selected ✓</span>':`<button class="btn soft" onclick="chooseMantra(${i})">Select</button>`}${i>=defaults.length?`<button class="btn soft" onclick="deleteMantra(${i})">×</button>`:''}</div>`).join('')}
+window.chooseMantra=function(i){state.selected=i;save();render();renderMantras();go('home');toast('Mantra selected')}
+window.addMantra=function(){const name=$('newMantra').value.trim(),pron=$('newPron').value.trim();if(!name)return toast('Enter a mantra first');state.mantras.push({name,pron});state.selected=state.mantras.length-1;$('newMantra').value='';$('newPron').value='';save();render();renderMantras();toast('Mantra saved')}
+window.deleteMantra=function(i){if(!confirm('Delete this mantra?'))return;state.mantras.splice(i,1);if(!state.mantras.length)state.mantras=defaults.slice();state.selected=Math.min(state.selected,state.mantras.length-1);save();render();renderMantras()}
+window.changeTheme=function(t){state.theme=t;document.querySelectorAll('#app').forEach(el=>el.classList.remove('dark','nature','temple','light'));if(t!=='saffron')$('app').classList.add(t);save()}
+window.changeGoal=function(g){state.goal=Number(g)||108;save();render();renderHistory()}
+window.savePrefs=function(){state.vibration=$('vibration').checked;state.sound=$('sound').checked;save();toast('Preferences saved')}
+window.clearData=function(){if(!confirm('Delete all saved jap data and settings?'))return;try{localStorage.removeItem('mantra-jap-app')}catch(e){}state={date:today(),count:0,total:0,goal:108,mantras:defaults,selected:0,theme:'saffron',vibration:true,sound:false,days:{},sessions:[]};sync();render();renderHistory();go('home');toast('App data cleared')}
+function sync(){$('theme').value=state.theme;$('goal').value=String(state.goal);$('vibration').checked=state.vibration;$('sound').checked=state.sound;changeTheme(state.theme)}
+sync();render();renderHistory();
+})();
+</script>
+</body>
+</html>
