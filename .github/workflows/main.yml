@@ -44,7 +44,10 @@ jobs:
         run: npx expo install --fix
 
       - name: Generate Android project
-        run: CI=1 npx expo prebuild --platform android --clean
+        run: CI=1 npx expo prebuild --platform android --clean --no-install
+
+      - name: Install dependencies after prebuild
+        run: npm install --legacy-peer-deps --no-audit --no-fund
 
       - name: Build debug APK
         run: |
