@@ -41,7 +41,7 @@ jobs:
         run: npm install --legacy-peer-deps --no-audit --no-fund
 
       - name: Generate Android project
-        run: CI=1 npx expo prebuild --platform android --clean --skip-dependency-update
+        run: CI=1 npx expo prebuild --platform android --clean --skip-dependency-update expo,react,react-native
 
       - name: Build debug APK
         run: |
