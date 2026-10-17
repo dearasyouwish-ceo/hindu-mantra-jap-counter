@@ -40,8 +40,11 @@ jobs:
       - name: Install app dependencies
         run: npm install --legacy-peer-deps --no-audit --no-fund
 
+      - name: Align Expo package versions
+        run: npx expo install --fix
+
       - name: Generate Android project
-        run: CI=1 npx expo prebuild --platform android --clean --skip-dependency-update expo,react,react-native
+        run: CI=1 npx expo prebuild --platform android --clean
 
       - name: Build debug APK
         run: |
