@@ -1,8 +1,11 @@
 
-name: Build Android APK
+name: Build Hindu Mantra Jap APK
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
   workflow_dispatch:
@@ -12,14 +15,14 @@ permissions:
 
 jobs:
   build:
-    name: Build Hindu Mantra Jap APK
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,15 +31,15 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Grant Gradle wrapper permission
-        run: chmod +x gradlew
+      - name: Grant execute permission
+        run: chmod +x ./gradlew
 
-      - name: Build debug APK
+      - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Hindu-Mantra-Jap-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
