@@ -1,1 +1,0 @@
-- [Mantra jap product direction](mantra-jap-product.md) — keep the practice offline-first and preserve its calm, temple-inspired saffron, cream, and gold identity.
